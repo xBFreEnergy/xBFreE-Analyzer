@@ -21,7 +21,7 @@ except Exception:
     from PyQt5.QtGui import *
 
 from utils import com2str, energy2pdb_pml
-from xBFreEana.style import (result_file_icon, bar_plot_icon, line_plot_icon, heatmap_plot_icon, pymol_icon, result_table_icon)
+from xBFreEana.assets import (result_file_icon, bar_plot_icon, line_plot_icon, heatmap_plot_icon, pymol_icon, result_table_icon)
 
 
 class SpacerItem(QToolButton):

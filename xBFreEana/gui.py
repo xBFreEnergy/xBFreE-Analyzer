@@ -32,7 +32,7 @@ from xBFreE.mmpbsa.API import MMPBSA_API
 
 from dialogs import InitDialog, ProcessingProgressBar
 from customitem import CustomItem, CustomCorrItem
-from style import (save_default_config, default_config, save_user_config, user_config, toc_img, logo, alert, config)
+from assets import (save_default_config, default_config, save_user_config, user_config, toc_img, logo, alert, config)
 from utils import ki2energy
 from chartsettings import ChartSettings, CorrChartSettings
 from parametertree import ParameterTree, Parameter

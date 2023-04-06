@@ -42,7 +42,7 @@ from scipy.stats import linregress, pearsonr, spearmanr
 
 # sns.set_theme()
 from chartsettings import Palettes
-from style import logo
+from assets import logo
 from utils import bar_label
 
 plt.rcParams["figure.autolayout"] = True

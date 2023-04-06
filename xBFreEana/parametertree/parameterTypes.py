@@ -29,7 +29,7 @@ import os
 from .Parameter import Parameter, registerParameterType
 from .ParameterItem import ParameterItem
 from collections import OrderedDict
-from style import restore_icon
+from xBFreEana.assets import restore_icon
 
 
 class ColorButton(QPushButton):

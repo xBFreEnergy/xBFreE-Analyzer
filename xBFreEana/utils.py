@@ -31,7 +31,7 @@ R = 0.001987
 
 ncpu = multiprocessing.cpu_count()
 
-style = Path(__file__).joinpath('style')
+style = Path(__file__).joinpath('assets')
 
 
 def bar_label(ax, container, labels=None, *, fmt="%g", label_type="edge", padding=0, **kwargs):
