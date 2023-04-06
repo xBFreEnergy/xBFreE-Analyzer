@@ -66,17 +66,8 @@ class NavigationToolbar(NavigationToolbar2QT):
         l = self.layout()
         # l = QHBoxLayout()
         l.setContentsMargins(0, 0, 0, 0)
-        self.save_format = 'png'
-        self.save_dpi = 300
         self.filename = 'image'
-
-    def update_options(self, options):
-        if 'save-format' in options:
-            self.save_format = options['save-format']
-        if 'dpi-save' in options:
-            self.save_dpi = options['dpi-save']
-        if 'filename' in options:
-            self.filename = options['filename'].replace(' | ', '_').replace(' ', '_')
+        self.chartbase = parent
 
     def _init_toolbar(self):
         pass
@@ -88,14 +79,14 @@ class NavigationToolbar(NavigationToolbar2QT):
         default_filetype = self.canvas.get_default_filetype()
 
         startpath = os.path.expanduser(matplotlib.rcParams['savefig.directory'])
-        filename = f'{self.filename}.{self.save_format}'
+        filename = f"{self.filename}.{self.chartbase.rc['savefig.format']}"
         start = os.path.join(startpath, filename)
         filters = []
         selectedFilter = None
         for name, exts in sorted_filetypes:
             exts_list = " ".join(f'*.{ext}' for ext in exts)
             filter = f'{name} ({exts_list})'
-            if self.save_format in exts:
+            if self.chartbase.rc['savefig.format'] in exts:
                 selectedFilter = filter
             filters.append(filter)
         filters = ';;'.join(filters)
@@ -109,7 +100,7 @@ class NavigationToolbar(NavigationToolbar2QT):
                 matplotlib.rcParams['savefig.directory'] = (
                     os.path.dirname(fname))
             try:
-                self.canvas.figure.savefig(fname, dpi=self.save_dpi)
+                self.canvas.figure.savefig(fname, dpi=self.chartbase.rc['savefig.dpi'])
             except Exception as e:
                 QMessageBox.critical(
                     self, "Error saving file", str(e),
@@ -125,25 +116,40 @@ class ChartsBase(QMdiSubWindow):
         self.setWindowIcon(QIcon(logo))
 
         self.mainwidgetmdi = QMainWindow()  # must be QMainWindow to handle the toolbar
-        sns.set_theme(style=self.options[('General', 'theme')])
+        # pre-configure rc for global parameters looking for General
+        self.rc = {}
+        for key, value in self.options.items():
+            if key[0] != 'General' or key[1] in ['theme', 'toolbar'] or len(key) != 3:
+                continue
+            # special cases
+            if key[-1] == 'fontname':
+                family, font = value.split('|')
+                self.rc['font.family'] = family
+                self.rc[f"font.{family.strip()}"] = font.strip()
+            elif key[-1].startswith('sns'):
+                continue
+            else:
+                self.rc[key[-1]] = value
+
+        sns.set_theme(style=self.options[('General', 'theme')], rc=self.rc)
         self.plot = None
         self.frange = []  # Frames range with which it was created
         self.button = button
         self.setWidget(self.mainwidgetmdi)
 
+    def update_rc(self, rc):
+        self.rc.update(rc)
+
     def set_cw(self, fig=None):
         # we create the figure canvas here because the fig parameter must be defined and depend on what kind of
         # chart want to make
-        fig = fig or Figure(dpi=self.options[('General', 'figure-format', 'dpi-plot')])
+        fig = fig or Figure()
         self.figure_canvas = FigureCanvas(fig)
         self.fig = self.figure_canvas.figure
         self.mainwidgetmdi.setCentralWidget(self.figure_canvas)
         # similar to figure canvas
         self.mpl_toolbar = NavigationToolbar(self.figure_canvas, self)
-        self.mpl_toolbar.setVisible(self.options['General', 'toolbar'])
-        self.mpl_toolbar.update_options({'save-format': self.options[('General', 'figure-format', 'save-format')],
-                                         'dpi-save': self.options[('General', 'figure-format', 'dpi-save')],
-                                         'filename': self.options['subtitle']})
+        self.mpl_toolbar.setVisible(self.options[('General', 'toolbar')])
         self.mainwidgetmdi.addToolBar(Qt.ToolBarArea.BottomToolBarArea, self.mpl_toolbar)
 
         self.fbtn = QPushButton(self.style().standardIcon(QStyle.StandardPixmap.SP_FileDialogDetailedView), '',
@@ -155,17 +161,20 @@ class ChartsBase(QMdiSubWindow):
 
     def draw(self):
         self.fig.tight_layout()
+        if self.options[('General', 'axes', 'sns.despine')]:
+            sns.despine(self.fig,
+                        offset=self.options[('General', 'axes', 'sns.despine.offset')],
+                        trim=self.options[('General', 'axes', 'sns.despine.trim')]
+                        )
         self.figure_canvas.draw()
         QGuiApplication.restoreOverrideCursor()
 
     def setup_text(self, ax, options, key='', title='', xlabel='', ylabel='Energy (kcal/mol)'):
         key_list = [key] if isinstance(key, str) else key
-        ax.set_title(title, fontdict={'fontsize': options[tuple(key_list + ['fontsize', 'suptitle'])]})
-        if 'Line Plot' in key_list:
-            ax.legend(loc="lower right", prop={'size': options[tuple(key_list + ['fontsize', 'legend'])]})
+        ax.set_title(title)
         if xlabel:
-            ax.set_xlabel(xlabel, fontdict={'fontsize': options[tuple(key_list + ['fontsize', 'x-label'])]})
-        ax.set_ylabel(ylabel, fontdict={'fontsize': options[tuple(key_list + ['fontsize', 'y-label'])]})
+            ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
         for label in ax.get_xticklabels():
             if options.get(tuple(key_list + ['axes', 'x-rotation'])):
                 label.set_rotation(options[tuple(key_list + ['axes', 'x-rotation'])])
@@ -173,7 +182,6 @@ class ChartsBase(QMdiSubWindow):
                     label.set_horizontalalignment('left')
                 else:
                     label.set_horizontalalignment('right')
-            label.set_fontsize(options[tuple(key_list + ['fontsize', 'x-ticks'])])
         for label in ax.get_yticklabels():
             if options.get(tuple(key_list + ['axes', 'y-rotation'])):
                 label.set_rotation(options[tuple(key_list + ['axes', 'y-rotation'])])
@@ -181,7 +189,6 @@ class ChartsBase(QMdiSubWindow):
                     label.set_horizontalalignment('left')
                 else:
                     label.set_horizontalalignment('right')
-            label.set_fontsize(options[tuple(key_list + ['fontsize', 'y-ticks'])])
 
     def closeEvent(self, closeEvent: QCloseEvent) -> None:
         self.button.setChecked(False)
@@ -202,7 +209,7 @@ class LineChart(ChartsBase):
         if options.get('iec2'):
             self.line_plot_ax = sns.lineplot(data=self.data['AccIntEnergy'],
                                              color=rgb2rgbf(options[('Line Plot', 'line-color')]),
-                                             linewidth=options[('Line Plot', 'line-width')],
+                                             linewidth=options[('Line Plot', 'linewidth')],
                                              ax=self.axes,
                                              label='IE(all)')
             # plot the ie segment
@@ -210,7 +217,7 @@ class LineChart(ChartsBase):
             sns.lineplot(data=self.data['ie'], color=ie_color, ax=self.axes, label='IE(selected)')
         else:
             self.line_plot_ax = sns.lineplot(data=self.data, color=rgb2rgbf(options[('Line Plot', 'line-color')]),
-                                             linewidth=options[('Line Plot', 'line-width')],
+                                             linewidth=options[('Line Plot', 'linewidth')],
                                              label=self.data.name,
                                              ax=self.axes)
             if options[('Line Plot', 'Rolling average', 'show')]:
@@ -232,16 +239,14 @@ class LineChart(ChartsBase):
         pass
 
     def update_config(self, options):
-        self.fig.suptitle(f"{options['title']}\n{options['subtitle']}",
-                          fontsize=options[('Line Plot', 'fontsize', 'title')])
+        self.fig.suptitle(f"{options['title']}\n{options['subtitle']}")
         self.line_plot_ax.xaxis.set_major_locator(
-            mticker.MaxNLocator(nbins=options[('Line Plot', 'axes', 'num-xticks')],
-                                integer=True))
+            mticker.MaxNLocator(nbins=options[('Line Plot', 'axes', 'num-xticks')], integer=True)
+        )
         self.line_plot_ax.yaxis.set_major_locator(
-            mticker.MaxNLocator(nbins=options[('Line Plot', 'axes', 'num-yticks')]))
-
+            mticker.MaxNLocator(nbins=options[('Line Plot', 'axes', 'num-yticks')])
+        )
         self.setup_text(self.line_plot_ax, options, key='Line Plot', xlabel=self.data.index.name)
-
         self.draw()
 
 
@@ -256,6 +261,11 @@ class BarChart(ChartsBase):
         self.fig.set_size_inches(options[('Bar Plot', 'figure', 'width')],
                                  options[('Bar Plot', 'figure', 'height')])
         self.bar_frames = False
+
+
+        # FIXME: vibrant palette
+        p = ["#0077BB","#33BBEE","#009988","#EE7733","#CC3311","#EE3377","#BBBBBB"]
+
         palette = (sns.color_palette(options[('Bar Plot', 'palette')], n_colors=self.data.columns.size)
                    if options[('Bar Plot', 'use-palette')] else None)
         if options.get('groups') and options[('Bar Plot', 'subplot-components')]:
@@ -283,7 +293,6 @@ class BarChart(ChartsBase):
                     bar_plot_ax.set_yscale('symlog')
                 if options[('Bar Plot', 'bar-label', 'show')]:
                     bl = bar_label(bar_plot_ax, bar_plot_ax.containers[1],
-                                   size=options[('Bar Plot', 'bar-label', 'fontsize')],
                                    fmt='%.2f',
                                    padding=options[('Bar Plot', 'bar-label', 'padding')],
                                    label_type=options[('Bar Plot', 'bar-label', 'label_type')])
@@ -316,7 +325,6 @@ class BarChart(ChartsBase):
                 bar_plot_ax.invert_yaxis()
             if options[('Bar Plot', 'bar-label', 'show')]:
                 bl = bar_label(bar_plot_ax, bar_plot_ax.containers[1],
-                               size=options[('Bar Plot', 'bar-label', 'fontsize')],
                                fmt='%.2f',
                                padding=options[('Bar Plot', 'bar-label', 'padding')],
                                label_type=options[('Bar Plot', 'bar-label', 'label_type')])
@@ -341,7 +349,7 @@ class BarChart(ChartsBase):
 
     def update_config(self, options):
         self.fig.suptitle(f"{options['title']}\n{options['subtitle']}",
-                          fontsize=options[('Bar Plot', 'fontsize', 'title')])
+                          )
         if isinstance(self.axes, np.ndarray):
             for c, g in enumerate(options['groups']):
                 bar_plot_ax = self.axes[c]
@@ -389,7 +397,7 @@ class HeatmapChart(ChartsBase):
         if options[('Heatmap Plot', 'highlight-components')]:
             mheatmap = MHeatmap(data=self.data,
                                 figsize=(fig_width, fig_height),
-                                dpi=options[('General', 'figure-format', 'dpi-plot')],
+                                dpi=options[('General', 'figure', 'dpi-plot')],
                                 heatmap_type=self.heatmap_type,
                                 rec_color=rgb2rgbf(options[('Heatmap Plot', 'receptor-color')]),
                                 lig_color=rgb2rgbf(options[('Heatmap Plot', 'ligand-color')]),

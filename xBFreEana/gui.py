@@ -765,10 +765,10 @@ class GMX_MMPBSA_ANA(QMainWindow):
 
                 if changes['figure']:
                     chart_sett = self.systems[s]['chart_options'].get_settings()
-                    options = {'save-format': chart_sett[('General', 'figure-format', 'save-format')],
-                               'dpi-save': chart_sett[('General', 'figure-format', 'dpi-save')]
+                    options = {'savefig.format': chart_sett[('General', 'figure', 'savefig.format')],
+                               'savefig.dpi': chart_sett[('General', 'figure', 'savefig.dpi')]
                                }
-                    sub.mpl_toolbar.update_options(options)
+                    sub.update_rc(options)
                     sub.fbtn.setChecked(chart_sett[('General', 'toolbar')])
                 elif sub.isVisible() and any(changes.values()) or replot_energy:
                     sub.close()
