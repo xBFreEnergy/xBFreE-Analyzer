@@ -1,0 +1,1627 @@
+{
+   "name": "parameters",
+   "type": "group",
+   "children": {
+      "General": {
+         "name": "General",
+         "type": "group",
+         "children": {
+            "theme": {
+               "name": "theme",
+               "type": "list",
+               "expanded": false,
+               "value": "ticks",
+               "values": [
+                  "ticks",
+                  "---0",
+                  "whitegrid",
+                  "dark",
+                  "white",
+                  "darkgrid"
+               ],
+               "default": "ticks",
+               "action_type": 3,
+               "tip": "changes visual theme for all plots"
+            },
+            "toolbar": {
+               "name": "toolbar",
+               "type": "bool",
+               "expanded": false,
+               "value": false,
+               "default": false,
+               "action_type": 2,
+               "tip": "shows toolbar in all graphs"
+            },
+            "figure": {
+               "name": "figure",
+               "type": "group",
+               "expanded": false,
+               "children": {
+                  "figure.titlesize": {
+                     "name": "figure.titlesize",
+                     "type": "list",
+                     "value": "x-large",
+                     "values": [
+                        "xx-small",
+                        "x-small",
+                        "small",
+                        "medium",
+                        "large",
+                        "x-large",
+                        "xx-large"
+                     ],
+                     "default": "x-large",
+                     "action_type": 2
+                  },
+                  "figure.titleweight": {
+                     "name": "figure.titleweight",
+                     "type": "list",
+                     "value": "normal",
+                     "values": [
+                        "100",
+                        "200",
+                        "300",
+                        "normal",
+                        "500",
+                        "600",
+                        "bold",
+                        "800",
+                        "900"
+                     ],
+                     "default": "normal",
+                     "action_type": 2
+                  },
+                  "figure.dpi": {
+                     "name": "figure.dpi",
+                     "type": "int",
+                     "value": 100,
+                     "step": 10,
+                     "accelerated": true,
+                     "limits": [
+                        50,
+                        300
+                     ],
+                     "default": 100,
+                     "action_type": 3,
+                     "tip": "set dpi for all plots"
+                  },
+                  "savefig.dpi": {
+                     "name": "savefig.dpi",
+                     "type": "int",
+                     "value": 300,
+                     "step": 10,
+                     "accelerated": true,
+                     "limits": [
+                        50,
+                        1200
+                     ],
+                     "default": 300,
+                     "action_type": 2,
+                     "tip": "dpi used for saved figures"
+                  },
+                  "savefig.format": {
+                     "name": "savefig.format",
+                     "type": "list",
+                     "value": "svg",
+                     "values": [
+                        "svg",
+                        "png",
+                        "tiff",
+                        "pdf",
+                        "eps",
+                        "jpg",
+                        "jpeg",
+                        "pgf",
+                        "ps",
+                        "raw",
+                        "rgba",
+                        "svgz",
+                        "tif"
+                     ],
+                     "default": "svg",
+                     "action_type": 2
+                  },
+                  "savefig.bbox": {
+                     "name": "savefig.bbox",
+                     "type": "list",
+                     "value": "tight",
+                     "values": [
+                        "tight",
+                        "standard"
+                     ],
+                     "default": "tight",
+                     "action_type": 3
+                  },
+                  "savefig.pad_inches": {
+                     "name": "savefig.pad_inches",
+                     "type": "float",
+                     "value": 0.1,
+                     "step": 0.01,
+                     "accelerated": true,
+                     "limits": [
+                        0,
+                        2
+                     ],
+                     "default": 0.1,
+                     "action_type": 3,
+                     "tip": "padding to be used, when bbox is set to 'tight'"
+                  }
+               }
+            },
+            "font": {
+               "name": "font",
+               "type": "group",
+               "expanded": false,
+               "children": {
+                  "fontname": {
+                     "name": "fontname",
+                     "type": "list",
+                     "value": "serif | DejaVu Serif",
+                     "values": [
+                        "serif | DejaVu Serif",
+                        "serif | Bitstream Vera Serif",
+                        "serif | Computer Modern Roman",
+                        "serif | New Century Schoolbook",
+                        "serif | Century Schoolbook L",
+                        "serif | Utopia",
+                        "serif | ITC Bookman",
+                        "serif | Bookman",
+                        "serif | Nimbus Roman No9 L",
+                        "serif | Times New Roman",
+                        "serif | Times",
+                        "serif | Palatino",
+                        "serif | Charter",
+                        "serif | serif",
+                        "sans-serif | DejaVu Sans",
+                        "sans-serif | Bitstream Vera Sans",
+                        "sans-serif | Computer Modern Sans Serif",
+                        "sans-serif | Lucida Grande",
+                        "sans-serif | Verdana",
+                        "sans-serif | Geneva",
+                        "sans-serif | Lucid",
+                        "sans-serif | Arial",
+                        "sans-serif | Helvetica",
+                        "sans-serif | Avant Garde",
+                        "sans-serif | sans-serif",
+                        "cursive | Apple Chancery",
+                        "cursive | Textile",
+                        "cursive | Zapf Chancery",
+                        "cursive | Sand",
+                        "cursive | Script MT",
+                        "cursive | Felipa",
+                        "cursive | Comic Neue",
+                        "cursive | Comic Sans MS",
+                        "cursive | cursive",
+                        "fantasy | Chicago",
+                        "fantasy | Charcoal",
+                        "fantasy | Impact",
+                        "fantasy | Western",
+                        "fantasy | Humor Sans",
+                        "fantasy | xkcd",
+                        "fantasy | fantasy",
+                        "monospace | DejaVu Sans Mono",
+                        "monospace | Bitstream Vera Sans Mono",
+                        "monospace | Computer Modern Typewriter",
+                        "monospace | Andale Mono",
+                        "monospace | Nimbus Mono L",
+                        "monospace | Courier New",
+                        "monospace | Courier",
+                        "monospace | Fixed",
+                        "monospace | Terminal",
+                        "monospace | monospace"
+                     ],
+                     "default": "serif | DejaVu Serif",
+                     "action_type": 2
+                  },
+                  "font.size": {
+                     "name": "font.size",
+                     "type": "float",
+                     "value": 10,
+                     "step": 0.5,
+                     "accelerated": true,
+                     "limits": [
+                        6,
+                        18
+                     ],
+                     "default": 10,
+                     "action_type": 3,
+                     "tip": "define the font size"
+                  }
+               }
+            },
+            "axes": {
+               "name": "axes",
+               "type": "group",
+               "expanded": false,
+               "children": {
+                  "axes.linewidth": {
+                     "name": "axes.linewidth",
+                     "type": "float",
+                     "value": 0.8,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.1,
+                        1.5
+                     ],
+                     "default": 0.8,
+                     "action_type": 3,
+                     "tip": "edge line width"
+                  },
+                  "axes.titlelocation": {
+                     "name": "axes.titlelocation",
+                     "type": "list",
+                     "value": "center",
+                     "values": [
+                        "left",
+                        "right",
+                        "center"
+                     ],
+                     "default": "center",
+                     "action_type": 2
+                  },
+                  "axes.titlesize": {
+                     "name": "axes.titlesize",
+                     "type": "list",
+                     "value": "large",
+                     "values": [
+                        "xx-small",
+                        "x-small",
+                        "small",
+                        "medium",
+                        "large",
+                        "x-large",
+                        "xx-large"
+                     ],
+                     "default": "large",
+                     "action_type": 2
+                  },
+                  "axes.titleweight": {
+                     "name": "axes.titleweight",
+                     "type": "list",
+                     "value": "normal",
+                     "values": [
+                        "100",
+                        "200",
+                        "300",
+                        "normal",
+                        "500",
+                        "600",
+                        "bold",
+                        "800",
+                        "900"
+                     ],
+                     "default": "normal",
+                     "action_type": 2
+                  },
+                  "axes.titlepad": {
+                     "name": "axes.titlepad",
+                     "type": "float",
+                     "value": 6.0,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 6.0,
+                     "action_type": 3,
+                     "tip": "pad between axes and title in points"
+                  },
+                  "axes.labelsize": {
+                     "name": "axes.labelsize",
+                     "type": "list",
+                     "value": "medium",
+                     "values": [
+                        "xx-small",
+                        "x-small",
+                        "small",
+                        "medium",
+                        "large",
+                        "x-large",
+                        "xx-large"
+                     ],
+                     "default": "medium",
+                     "action_type": 2
+                  },
+                  "axes.labelpad": {
+                     "name": "axes.labelpad",
+                     "type": "float",
+                     "value": 4.0,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 4.0,
+                     "action_type": 3,
+                     "tip": "space between label and axis"
+                  },
+                  "axes.labelweight": {
+                     "name": "axes.labelweight",
+                     "type": "list",
+                     "value": "normal",
+                     "values": [
+                        "100",
+                        "200",
+                        "300",
+                        "normal",
+                        "500",
+                        "600",
+                        "bold",
+                        "800",
+                        "900"
+                     ],
+                     "default": "normal",
+                     "action_type": 2
+                  },
+                  "xaxis.labellocation": {
+                     "name": "xaxis.labellocation",
+                     "type": "list",
+                     "value": "center",
+                     "values": [
+                        "left",
+                        "right",
+                        "center"
+                     ],
+                     "default": "center",
+                     "action_type": 2
+                  },
+                  "yaxis.labellocation": {
+                     "name": "yaxis.labellocation",
+                     "type": "list",
+                     "value": "center",
+                     "values": [
+                        "bottom",
+                        "top",
+                        "center"
+                     ],
+                     "default": "center",
+                     "action_type": 2
+                  },
+                  "sns.despine": {
+                     "name": "sns.despine",
+                     "type": "bool",
+                     "value": true,
+                     "default": true,
+                     "action_type": 3
+                  },
+                  "sns.despine.offset": {
+                     "name": "sns.despine.offset",
+                     "type": "float",
+                     "value": 10,
+                     "step": 1,
+                     "accelerated": true,
+                     "limits": [
+                        0,
+                        50
+                     ],
+                     "default": 10,
+                     "action_type": 3,
+                     "tip": "Absolute distance, in points, spines should be moved away from the axes"
+                  },
+                  "sns.despine.trim": {
+                     "name": "sns.despine.trim",
+                     "type": "bool",
+                     "value": false,
+                     "default": false,
+                     "action_type": 3,
+                     "tip": "If True, limit spines to the smallest and largest major tick on each non-despined axis."
+                  }
+               }
+            },
+            "ticks": {
+               "name": "ticks",
+               "type": "group",
+               "expanded": false,
+               "children": {
+                  "xtick.major.size": {
+                     "name": "xtick.major.size",
+                     "type": "float",
+                     "value": 3.5,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 3.5,
+                     "action_type": 3,
+                     "tip": "major tick size in points"
+                  },
+                  "xtick.major.width": {
+                     "name": "xtick.major.width",
+                     "type": "float",
+                     "value": 0.8,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 0.8,
+                     "action_type": 3,
+                     "tip": "major tick width in points"
+                  },
+                  "xtick.major.pad": {
+                     "name": "xtick.major.pad",
+                     "type": "float",
+                     "value": 3.5,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 3.5,
+                     "action_type": 3,
+                     "tip": "distance to major tick label in points"
+                  },
+                  "xtick.minor.size": {
+                     "name": "xtick.minor.size",
+                     "type": "float",
+                     "value": 2,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 2,
+                     "action_type": 3,
+                     "tip": "minor tick size in points"
+                  },
+                  "xtick.minor.width": {
+                     "name": "xtick.minor.width",
+                     "type": "float",
+                     "value": 0.6,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 0.6,
+                     "action_type": 3,
+                     "tip": "minor tick width in points"
+                  },
+                  "xtick.minor.pad": {
+                     "name": "xtick.minor.pad",
+                     "type": "float",
+                     "value": 3.4,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 3.4,
+                     "action_type": 3,
+                     "tip": "distance to minor tick label in points"
+                  },
+                  "xtick.labelsize": {
+                     "name": "xtick.labelsize",
+                     "type": "list",
+                     "value": "medium",
+                     "values": [
+                        "xx-small",
+                        "x-small",
+                        "small",
+                        "medium",
+                        "large",
+                        "x-large",
+                        "xx-large"
+                     ],
+                     "default": "medium",
+                     "action_type": 2
+                  },
+                  "xtick.direction": {
+                     "name": "xtick.direction",
+                     "type": "list",
+                     "value": "out",
+                     "values": [
+                        "in",
+                        "out",
+                        "inout"
+                     ],
+                     "default": "out",
+                     "action_type": 2
+                  },
+                  "xtick.minor.visible": {
+                     "name": "xtick.minor.visible",
+                     "type": "bool",
+                     "value": false,
+                     "default": false,
+                     "action_type": 3
+                  },
+                  "xtick.alignment": {
+                     "name": "xtick.alignment",
+                     "type": "list",
+                     "value": "center",
+                     "values": [
+                        "left",
+                        "right",
+                        "center"
+                     ],
+                     "default": "center",
+                     "action_type": 2
+                  },
+                  "ytick.major.size": {
+                     "name": "ytick.major.size",
+                     "type": "float",
+                     "value": 3.5,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 3.5,
+                     "action_type": 3,
+                     "tip": "major tick size in points"
+                  },
+                  "ytick.major.width": {
+                     "name": "ytick.major.width",
+                     "type": "float",
+                     "value": 0.8,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 0.8,
+                     "action_type": 3,
+                     "tip": "major tick width in points"
+                  },
+                  "ytick.major.pad": {
+                     "name": "ytick.major.pad",
+                     "type": "float",
+                     "value": 3.5,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 3.5,
+                     "action_type": 3,
+                     "tip": "distance to major tick label in points"
+                  },
+                  "ytick.minor.size": {
+                     "name": "ytick.minor.size",
+                     "type": "float",
+                     "value": 2,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 2,
+                     "action_type": 3,
+                     "tip": "minor tick size in points"
+                  },
+                  "ytick.minor.width": {
+                     "name": "ytick.minor.width",
+                     "type": "float",
+                     "value": 0.6,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 0.6,
+                     "action_type": 3,
+                     "tip": "minor tick width in points"
+                  },
+                  "ytick.minor.pad": {
+                     "name": "ytick.minor.pad",
+                     "type": "float",
+                     "value": 3.4,
+                     "step": 0.1,
+                     "accelerated": true,
+                     "limits": [
+                        0.0,
+                        10.0
+                     ],
+                     "default": 3.4,
+                     "action_type": 3,
+                     "tip": "distance to minor tick label in points"
+                  },
+                  "ytick.labelsize": {
+                     "name": "ytick.labelsize",
+                     "type": "list",
+                     "value": "medium",
+                     "values": [
+                        "xx-small",
+                        "x-small",
+                        "small",
+                        "medium",
+                        "large",
+                        "x-large",
+                        "xx-large"
+                     ],
+                     "default": "medium",
+                     "action_type": 2
+                  },
+                  "ytick.direction": {
+                     "name": "ytick.direction",
+                     "type": "list",
+                     "value": "out",
+                     "values": [
+                        "in",
+                        "out",
+                        "inout"
+                     ],
+                     "default": "out",
+                     "action_type": 2
+                  },
+                  "ytick.minor.visible": {
+                     "name": "ytick.minor.visible",
+                     "type": "bool",
+                     "value": true,
+                     "default": true,
+                     "action_type": 3
+                  },
+                  "ytick.alignment": {
+                     "name": "ytick.alignment",
+                     "type": "list",
+                     "value": "center",
+                     "values": [
+                        "left",
+                        "right",
+                        "center"
+                     ],
+                     "default": "center",
+                     "action_type": 2
+                  }
+               }
+            },
+            "legend": {
+               "name": "legend",
+               "type": "group",
+               "expanded": false,
+               "children": {
+                  "legend.loc": {
+                     "name": "legend.loc",
+                     "type": "list",
+                     "value": "best",
+                     "values": [
+                        "best",
+                        "upper right",
+                        "upper left",
+                        "lower left",
+                        "lower right",
+                        "right",
+                        "center left",
+                        "center right",
+                        "lower center",
+                        "upper center",
+                        "center"
+                     ],
+                     "default": "best",
+                     "action_type": 2
+                  },
+                  "legend.frameon": {
+                     "name": "legend.frameon",
+                     "type": "bool",
+                     "value": false,
+                     "default": false,
+                     "action_type": 3
+                  },
+                  "legend.fontsize": {
+                     "name": "legend.fontsize",
+                     "type": "list",
+                     "value": "medium",
+                     "values": [
+                        "xx-small",
+                        "x-small",
+                        "small",
+                        "medium",
+                        "large",
+                        "x-large",
+                        "xx-large"
+                     ],
+                     "default": "medium",
+                     "action_type": 2
+                  }
+               }
+            }
+         }
+      },
+      "Line Plot": {
+         "name": "Line Plot",
+         "type": "group",
+         "expanded": false,
+         "children": {
+            "linewidth": {
+               "name": "linewidth",
+               "type": "float",
+               "value": 0.7,
+               "step": 0.1,
+               "limits": [
+                  0.1,
+                  1.5
+               ],
+               "accelerated": true,
+               "default": 0.7,
+               "action_type": 3
+            },
+            "line-color": {
+               "type": "color",
+               "name": "line-color",
+               "value": [
+                  103,
+                  103,
+                  103,
+                  255
+               ],
+               "default": [
+                  103,
+                  103,
+                  103,
+                  255
+               ],
+               "action_type": 3
+            },
+            "Rolling average": {
+               "name": "Rolling average",
+               "type": "group",
+               "children": {
+                  "show": {
+                     "type": "bool",
+                     "name": "show",
+                     "value": true,
+                     "default": true,
+                     "action_type": 3
+                  },
+                  "color": {
+                     "type": "color",
+                     "name": "color",
+                     "value": [
+                        254,
+                        88,
+                        0,
+                        255
+                     ],
+                     "default": [
+                        254,
+                        88,
+                        0,
+                        255
+                     ],
+                     "action_type": 3
+                  },
+                  "style": {
+                     "type": "list",
+                     "name": "style",
+                     "value": "dashed",
+                     "values": [
+                        "dashed",
+                        "solid",
+                        "dashdot",
+                        "dotted"
+                     ],
+                     "default": "dashed",
+                     "action_type": 3
+                  },
+                  "width": {
+                     "type": "float",
+                     "name": "width",
+                     "value": 0.8,
+                     "step": 0.1,
+                     "default": 0.8,
+                     "action_type": 3
+                  },
+                  "window": {
+                     "type": "int",
+                     "name": "window",
+                     "value": 50,
+                     "step": 1,
+                     "limits": [
+                        2,
+                        100000
+                     ],
+                     "accelerated": true,
+                     "default": 50,
+                     "action_type": 3
+                  },
+                  "first_obs": {
+                     "type": "list",
+                     "name": "first_obs",
+                     "value": "window",
+                     "values": [
+                        "window",
+                        "start"
+                     ],
+                     "default": "window",
+                     "action_type": 3,
+                     "tip": "Defines the start value of the moving average. Window: set start according tothe defined window size. Start: set start at the first value."
+                  }
+               }
+            },
+            "axes": {
+               "name": "axes",
+               "type": "group",
+               "children": {
+                  "num-xticks": {
+                     "name": "num-xticks",
+                     "type": "int",
+                     "value": 10,
+                     "default": 10,
+                     "action_type": 3
+                  },
+                  "num-yticks": {
+                     "name": "num-yticks",
+                     "type": "int",
+                     "value": 10,
+                     "default": 10,
+                     "action_type": 3
+                  },
+                  "x-rotation": {
+                     "name": "x-rotation",
+                     "type": "int",
+                     "value": 0,
+                     "step": 1,
+                     "limits": [
+                        -90,
+                        90
+                     ],
+                     "accelerated": true,
+                     "default": 0,
+                     "action_type": 1
+                  },
+                  "y-rotation": {
+                     "name": "y-rotation",
+                     "type": "int",
+                     "value": 0,
+                     "step": 1,
+                     "limits": [
+                        -90,
+                        90
+                     ],
+                     "accelerated": true,
+                     "default": 0,
+                     "action_type": 1
+                  }
+               }
+            },
+            "figure": {
+               "name": "figure",
+               "type": "group",
+               "children": {
+                  "width": {
+                     "name": "width",
+                     "type": "int",
+                     "value": 8,
+                     "default": 8,
+                     "action_type": 3
+                  },
+                  "height": {
+                     "name": "height",
+                     "type": "int",
+                     "value": 4,
+                     "default": 4,
+                     "action_type": 3
+                  }
+               }
+            }
+         }
+      },
+      "Bar Plot": {
+         "name": "Bar Plot",
+         "type": "group",
+         "expanded": false,
+         "children": {
+            "use-palette": {
+               "name": "use-palette",
+               "type": "bool",
+               "value": true,
+               "default": true,
+               "action_type": 3
+            },
+            "palette": {
+               "name": "palette",
+               "type": "list",
+               "value": "husl",
+               "values": [
+                  "husl",
+                  "---0",
+                  "hls",
+                  "deep",
+                  "muted",
+                  "bright",
+                  "pastel",
+                  "dark",
+                  "colorblind",
+                  "---1",
+                  "Pastel1",
+                  "Pastel2",
+                  "Paired",
+                  "Accent",
+                  "Dark2",
+                  "Set1",
+                  "Set2",
+                  "Set3",
+                  "tab10",
+                  "tab20",
+                  "tab20b",
+                  "tab20c"
+               ],
+               "default": "husl",
+               "action_type": 3,
+               "tip": ""
+            },
+            "color": {
+               "name": "color",
+               "type": "color",
+               "value": [
+                  44,
+                  105,
+                  176,
+                  255
+               ],
+               "default": [
+                  44,
+                  105,
+                  176,
+                  255
+               ],
+               "action_type": 3
+            },
+            "subplot-components": {
+               "name": "subplot-components",
+               "type": "bool",
+               "value": true,
+               "default": true,
+               "action_type": 3,
+               "tip": "Groups energy components in bar plot"
+            },
+            "scale-yaxis": {
+               "name": "scale-yaxis",
+               "type": "bool",
+               "value": false,
+               "default": false,
+               "action_type": 3,
+               "tip": "Uses exponential values in y-axis"
+            },
+            "remove-molid": {
+               "name": "remove-molid",
+               "type": "bool",
+               "value": true,
+               "default": true,
+               "action_type": 3
+            },
+            "IE/C2 Entropy": {
+               "name": "IE/C2 Entropy",
+               "type": "group",
+               "children": {
+                  "ie-color": {
+                     "name": "ie-color",
+                     "type": "color",
+                     "value": [
+                        0,
+                        0,
+                        255,
+                        255
+                     ],
+                     "default": [
+                        0,
+                        0,
+                        255,
+                        255
+                     ],
+                     "action_type": 3
+                  },
+                  "sigma-color": {
+                     "name": "sigma-color",
+                     "type": "group",
+                     "children": {
+                        "reliable": {
+                           "name": "reliable",
+                           "type": "color",
+                           "value": [
+                              0,
+                              255,
+                              0,
+                              255
+                           ],
+                           "default": [
+                              0,
+                              255,
+                              0,
+                              255
+                           ],
+                           "action_type": 3,
+                           "tip": "Color if sigma < 3.6kcal/mol"
+                        },
+                        "non-reliable": {
+                           "name": "non-reliable",
+                           "type": "color",
+                           "value": [
+                              255,
+                              0,
+                              0,
+                              255
+                           ],
+                           "default": [
+                              255,
+                              0,
+                              0,
+                              255
+                           ],
+                           "action_type": 3,
+                           "tip": "Color if sigma > 3.6kcal/mol"
+                        }
+                     }
+                  }
+               }
+            },
+            "error-line": {
+               "name": "error-line",
+               "type": "group",
+               "children": {
+                  "width": {
+                     "type": "float",
+                     "name": "width",
+                     "value": 0.7,
+                     "step": 0.1,
+                     "limits": [
+                        0.1,
+                        1.5
+                     ],
+                     "accelerated": true,
+                     "default": 0.7,
+                     "action_type": 3
+                  },
+                  "color": {
+                     "type": "color",
+                     "name": "color",
+                     "value": [
+                        0,
+                        0,
+                        0,
+                        255
+                     ],
+                     "default": [
+                        0,
+                        0,
+                        0,
+                        255
+                     ],
+                     "action_type": 3
+                  },
+                  "cap-size": {
+                     "type": "int",
+                     "name": "cap-size",
+                     "value": 0,
+                     "step": 1,
+                     "limits": [
+                        0,
+                        50
+                     ],
+                     "accelerated": true,
+                     "default": 0,
+                     "action_type": 3
+                  },
+                  "representation": {
+                     "type": "list",
+                     "name": "representation",
+                     "value": "SD",
+                     "values": [
+                        "SD",
+                        "SEM"
+                     ],
+                     "default": "SD",
+                     "action_type": 3,
+                     "tip": "The metric representing the error line. SD, the Standard Deviation, describes the data distribution around the mean, while SEM, the Standard Error of the Mean, describes how representative the mean is of the population."
+                  }
+               }
+            },
+            "bar-label": {
+               "name": "bar-label",
+               "type": "group",
+               "children": {
+                  "show": {
+                     "type": "bool",
+                     "name": "show",
+                     "value": false,
+                     "default": false,
+                     "action_type": 3
+                  },
+                  "fontsize": {
+                     "type": "int",
+                     "name": "fontsize",
+                     "value": 8,
+                     "limits": [
+                        2,
+                        20
+                     ],
+                     "default": 8,
+                     "action_type": 1
+                  },
+                  "label_type": {
+                     "type": "list",
+                     "name": "label_type",
+                     "value": "edge",
+                     "values": [
+                        "edge",
+                        "center"
+                     ],
+                     "default": "edge",
+                     "action_type": 3
+                  },
+                  "padding": {
+                     "type": "int",
+                     "name": "padding",
+                     "value": 5,
+                     "limits": [
+                        0,
+                        50
+                     ],
+                     "default": 5,
+                     "action_type": 3
+                  }
+               }
+            },
+            "axes": {
+               "name": "axes",
+               "type": "group",
+               "children": {
+                  "num-yticks": {
+                     "type": "int",
+                     "name": "num-yticks",
+                     "value": 10,
+                     "default": 10,
+                     "action_type": 1
+                  },
+                  "x-rotation": {
+                     "type": "int",
+                     "name": "x-rotation",
+                     "value": 45,
+                     "step": 1,
+                     "limits": [
+                        -90,
+                        90
+                     ],
+                     "accelerated": true,
+                     "default": 45,
+                     "action_type": 1
+                  },
+                  "y-rotation": {
+                     "type": "int",
+                     "name": "y-rotation",
+                     "value": 0,
+                     "step": 1,
+                     "limits": [
+                        -90,
+                        90
+                     ],
+                     "accelerated": true,
+                     "default": 0,
+                     "action_type": 1
+                  },
+                  "y-inverted": {
+                     "type": "bool",
+                     "name": "y-inverted",
+                     "value": true,
+                     "default": true,
+                     "action_type": 3
+                  }
+               }
+            },
+            "figure": {
+               "name": "figure",
+               "type": "group",
+               "children": {
+                  "width": {
+                     "type": "int",
+                     "name": "width",
+                     "value": 5,
+                     "default": 5,
+                     "action_type": 3
+                  },
+                  "height": {
+                     "type": "int",
+                     "name": "height",
+                     "value": 4,
+                     "default": 4,
+                     "action_type": 3
+                  }
+               }
+            }
+         }
+      },
+      "Heatmap Plot": {
+         "name": "Heatmap Plot",
+         "type": "group",
+         "expanded": false,
+         "children": {
+            "highlight-components": {
+               "type": "bool",
+               "name": "highlight-components",
+               "value": true,
+               "default": true,
+               "action_type": 3,
+               "tip": "Highlights receptor/ligand residues"
+            },
+            "legend": {
+               "name": "legend",
+               "type": "bool",
+               "value": true,
+               "default": true,
+               "action_type": 3
+            },
+            "remove-molid": {
+               "name": "remove-molid",
+               "type": "bool",
+               "value": true,
+               "default": true,
+               "action_type": 3,
+               "tip": "Removes R/L labels from residue names"
+            },
+            "receptor-color": {
+               "name": "receptor-color",
+               "type": "color",
+               "value": [
+                  255,
+                  85,
+                  127,
+                  255
+               ],
+               "default": [
+                  255,
+                  85,
+                  127,
+                  255
+               ],
+               "action_type": 3
+            },
+            "ligand-color": {
+               "name": "ligand-color",
+               "type": "color",
+               "value": [
+                  0,
+                  255,
+                  0,
+                  255
+               ],
+               "default": [
+                  0,
+                  255,
+                  0,
+                  255
+               ],
+               "action_type": 3
+            },
+            "y-rotation": {
+               "name": "y-rotation",
+               "type": "int",
+               "value": 0,
+               "step": 1,
+               "limits": [
+                  -90,
+                  90
+               ],
+               "accelerated": true,
+               "default": 0,
+               "action_type": 1
+            },
+            "Per-wise": {
+               "name": "Per-wise",
+               "type": "group",
+               "children": {
+                  "palette": {
+                     "type": "list",
+                     "name": "palette",
+                     "value": "seismic",
+                     "values": [
+                        "seismic",
+                        "---1",
+                        "Balance_7",
+                        "Balance_5",
+                        "Curl_7",
+                        "Curl_5",
+                        "Delta_7",
+                        "Delta_5",
+                        "---2",
+                        "ArmyRose_7",
+                        "ArmyRose_5",
+                        "Geyser_7",
+                        "Geyser_5",
+                        "Temps_7",
+                        "Temps_5",
+                        "TealRose_7",
+                        "TealRose_5",
+                        "Tropic_7",
+                        "Tropic_5",
+                        "---3",
+                        "BrBG_7",
+                        "BrBG_5",
+                        "PRGn_7",
+                        "PRGn_5",
+                        "PiYG_7",
+                        "PiYG_5",
+                        "PuOr_7",
+                        "PuOr_5",
+                        "RdBu_7",
+                        "RdBu_5",
+                        "RdGy_7",
+                        "RdGy_5",
+                        "---4",
+                        "---5",
+                        "RdYlBu",
+                        "RdYlGn",
+                        "Spectral",
+                        "coolwarm"
+                     ],
+                     "default": "seismic",
+                     "action_type": 3,
+                     "tip": ""
+                  },
+                  "annotation": {
+                     "type": "bool",
+                     "name": "annotation",
+                     "value": false,
+                     "default": false,
+                     "action_type": 3
+                  },
+                  "x-rotation": {
+                     "type": "int",
+                     "name": "x-rotation",
+                     "value": 90,
+                     "step": 1,
+                     "limits": [
+                        -90,
+                        90
+                     ],
+                     "accelerated": true,
+                     "default": 90,
+                     "action_type": 1
+                  }
+               }
+            },
+            "Per-residue": {
+               "name": "Per-residue",
+               "type": "group",
+               "children": {
+                  "palette": {
+                     "type": "list",
+                     "name": "palette",
+                     "value": "seismic",
+                     "values": [
+                        "seismic",
+                        "---1",
+                        "Balance_7",
+                        "Balance_5",
+                        "Curl_7",
+                        "Curl_5",
+                        "Delta_7",
+                        "Delta_5",
+                        "---2",
+                        "ArmyRose_7",
+                        "ArmyRose_5",
+                        "Geyser_7",
+                        "Geyser_5",
+                        "Temps_7",
+                        "Temps_5",
+                        "TealRose_7",
+                        "TealRose_5",
+                        "Tropic_7",
+                        "Tropic_5",
+                        "---3",
+                        "BrBG_7",
+                        "BrBG_5",
+                        "PRGn_7",
+                        "PRGn_5",
+                        "PiYG_7",
+                        "PiYG_5",
+                        "PuOr_7",
+                        "PuOr_5",
+                        "RdBu_7",
+                        "RdBu_5",
+                        "RdGy_7",
+                        "RdGy_5",
+                        "---4",
+                        "---5",
+                        "RdYlBu",
+                        "RdYlGn",
+                        "Spectral",
+                        "coolwarm"
+                     ],
+                     "default": "seismic",
+                     "action_type": 3,
+                     "tip": ""
+                  },
+                  "num-xticks": {
+                     "type": "int",
+                     "name": "num-xticks",
+                     "value": 10,
+                     "default": 10,
+                     "action_type": 3
+                  },
+                  "x-rotation": {
+                     "type": "int",
+                     "name": "x-rotation",
+                     "value": 0,
+                     "step": 1,
+                     "limits": [
+                        -90,
+                        90
+                     ],
+                     "accelerated": true,
+                     "default": 0,
+                     "action_type": 1
+                  }
+               }
+            },
+            "figure": {
+               "name": "figure",
+               "type": "group",
+               "children": {
+                  "width-per-residue": {
+                     "type": "int",
+                     "name": "width-per-residue",
+                     "value": 10,
+                     "default": 10,
+                     "action_type": 3
+                  },
+                  "width-per-wise": {
+                     "type": "int",
+                     "name": "width-per-wise",
+                     "value": 8,
+                     "default": 8,
+                     "action_type": 3
+                  },
+                  "height": {
+                     "type": "int",
+                     "name": "height",
+                     "value": 7,
+                     "default": 7,
+                     "action_type": 3
+                  }
+               }
+            }
+         }
+      },
+      "3D-Visualization": {
+         "name": "3D-Visualization",
+         "type": "group",
+         "expanded": false,
+         "children": {
+            "palette": {
+               "type": "list",
+               "name": "palette",
+               "value": "auto",
+               "values": [
+                  "auto",
+                  "---0",
+                  "seismic",
+                  "---1",
+                  "Balance_7",
+                  "Balance_5",
+                  "Curl_7",
+                  "Curl_5",
+                  "Delta_7",
+                  "Delta_5",
+                  "---2",
+                  "ArmyRose_7",
+                  "ArmyRose_5",
+                  "Geyser_7",
+                  "Geyser_5",
+                  "Temps_7",
+                  "Temps_5",
+                  "TealRose_7",
+                  "TealRose_5",
+                  "Tropic_7",
+                  "Tropic_5",
+                  "---3",
+                  "BrBG_7",
+                  "BrBG_5",
+                  "PRGn_7",
+                  "PRGn_5",
+                  "PiYG_7",
+                  "PiYG_5",
+                  "PuOr_7",
+                  "PuOr_5",
+                  "RdBu_7",
+                  "RdBu_5",
+                  "RdGy_7",
+                  "RdGy_5"
+               ],
+               "default": "auto",
+               "action_type": 3,
+               "tip": ""
+            },
+            "cartoon_oval_length": {
+               "type": "float",
+               "name": "cartoon_oval_length",
+               "value": 1.0,
+               "step": 0.1,
+               "default": 1.0,
+               "action_type": 3
+            },
+            "cartoon_rect_length": {
+               "type": "float",
+               "name": "cartoon_rect_length",
+               "value": 1.2,
+               "step": 0.1,
+               "default": 1.2,
+               "action_type": 3
+            },
+            "cartoon_rect_width": {
+               "type": "float",
+               "name": "cartoon_rect_width",
+               "value": 0.3,
+               "step": 0.1,
+               "default": 0.3,
+               "action_type": 3
+            },
+            "cartoon_side_chain_helper": {
+               "type": "bool",
+               "name": "cartoon_side_chain_helper",
+               "value": true,
+               "default": true,
+               "action_type": 3
+            },
+            "light_count": {
+               "type": "int",
+               "name": "light_count",
+               "value": 1,
+               "step": 1,
+               "accelerated": false,
+               "limits": [
+                  1,
+                  10
+               ],
+               "default": 1,
+               "action_type": 3,
+               "tip": "Defines the number of light sources"
+            },
+            "background": {
+               "type": "list",
+               "name": "background",
+               "value": "gray50",
+               "values": [
+                  "gray50",
+                  "---0",
+                  "black",
+                  "gray10",
+                  "gray20",
+                  "gray30",
+                  "gray40",
+                  "gray60",
+                  "gray70",
+                  "gray80",
+                  "gray90",
+                  "white"
+               ],
+               "default": "gray50",
+               "action_type": 3
+            },
+            "representation": {
+               "type": "list",
+               "name": "representation",
+               "value": "sticks",
+               "values": [
+                  "sticks",
+                  "---0",
+                  "lines",
+                  "---1",
+                  "spheres",
+                  "surface",
+                  "mesh",
+                  "dots",
+                  "lines+dots",
+                  "sticks+dots"
+               ],
+               "default": "sticks",
+               "action_type": 3
+            }
+         }
+      }
+   }
+}

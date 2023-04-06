@@ -11,13 +11,13 @@
 #  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License    #
 #  for more details.                                                           #
 # ##############################################################################
-
+from copy import deepcopy
 from typing import Union
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.cm import datad
 from pathlib import Path
 import json
-from style import *
+import assets
 
 
 def flatten_dict(d, parent_key=None):
@@ -314,370 +314,17 @@ class ChartSettings(dict):
     D = 1  # Drawable
     U = 2  # Updatable
     R = 3  # re-plot
-    default = {
-        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'parameters', 'value': None, 'default': None,
-        'children': {
-            'General': {
-                'type': 'group', 'enabled': True, 'expanded': True, 'name': 'General', 'value': None, 'default':
-                    None,
-                'children': {
-                    'theme': {
-                        'type': 'list', 'enabled': True, 'expanded': True, 'name': 'theme', 'value': 'darkgrid',
-                        'values': ['darkgrid', '---0', 'whitegrid', 'dark', 'white', 'ticks'], 'default': 'darkgrid',
-                        'action_type': R, 'tip': 'changes visual theme for all plots'},
-                    'toolbar': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'toolbar', 'value': False,
-                                'default': False, 'action_type': U, 'tip': 'shows toolbar in all graphs'},
-                    'figure-format': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'figure-format', 'value': None,
-                        'default': None,
-                        'children': {
-                            'dpi-plot': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'dpi-plot',
-                                         'value': 100, 'step': 10, 'accelerated': True, 'limits': (50, 300),
-                                         'default': 100, 'action_type': R, 'tip': 'set dpi for all plots'},
-                            'dpi-save': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'dpi-save',
-                                         'value': 300, 'step': 10, 'accelerated': True, 'limits': (50, 1200),
-                                         'default': 300, 'action_type': U, 'tip': 'dpi used for saved figures'},
-                            'save-format': {
-                                'type': 'list', 'enabled': True, 'expanded': True, 'name': 'save-format',
-                                'value': 'svg', 'values': ['svg', 'png', 'tiff', 'pdf', 'eps', 'jpg', 'jpeg', 'pgf',
-                                                           'ps', 'raw', 'rgba', 'svgz', 'tif'],
-                                'default': 'svg', 'action_type': U},
-                        }}}},
-            'Line Plot': {
-                'type': 'group', 'enabled': True, 'expanded': False, 'name': 'Line Plot', 'value': None, 'default':
-                    None,
-                'children': {
-                    'line-width': {'type': 'float', 'enabled': True, 'expanded': True, 'name': 'line-width',
-                                   'value': 0.7, 'step': 0.1, 'limits': (0.1, 1.5), 'accelerated': True,
-                                   'default': 0.7, 'action_type': R},
-                    'line-color': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'line-color',
-                                   'value': [0, 0, 0, 255], 'default': [0, 0, 0, 255], 'action_type': R},
-
-                    'Rolling average': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'Rolling average', 'value': None,
-                        'default': None,
-                        'children': {
-                            'show': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'show', 'value': True,
-                                     'default': True, 'action_type': R},
-                            'color': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'color',
-                                      'value': [255, 0, 0, 255], 'default': [255, 0, 0, 255], 'action_type': R},
-                            'style': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'style',
-                                      'value': 'dashed', 'values': ['dashed', 'solid', 'dashdot', 'dotted'],
-                                      'default': 'dashed', 'action_type': R},
-                            'width': {'type': 'float', 'enabled': True, 'expanded': True, 'name': 'width',
-                                      'value': 0.8, 'step': 0.1, 'default': 0.8, 'action_type': R},
-                            'window': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'window',
-                                       'value': 50, 'step': 1, 'limits': (2, 100000), 'accelerated': True,
-                                       'default': 50, 'action_type': R},
-                            'first_obs': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'first_obs',
-                                          'value': 'window', 'values': ['window', 'start'], 'default': 'window',
-                                          'action_type': R, 'tip': 'Defines the start value of the moving average. '
-                                                                   'Window: set start according to'
-                                                                   'the defined window size. Start: '
-                                                                   'set start at the first value.'}}},
-                    'fontsize': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'fontsize', 'value': None,
-                        'default': None,
-                        'children': {
-                            'x-ticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-ticks',
-                                        'value': 10, 'default': 10, 'action_type': D},
-                            'y-ticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-ticks',
-                                        'value': 10, 'default': 10, 'action_type': D},
-                            'x-label': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-label',
-                                        'value': 12, 'default': 12, 'action_type': D},
-                            'y-label': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-label',
-                                        'value': 12, 'default': 12, 'action_type': D},
-                            'title': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'title',
-                                      'value': 14, 'default': 14, 'action_type': D},
-                            'suptitle': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'suptitle',
-                                         'value': 12, 'default': 12, 'action_type': D},
-                            'legend': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'legend',
-                                       'value': 9, 'default': 9, 'action_type': D}}},
-                    'axes': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'axes', 'value': None,
-                        'default': None,
-                        'children': {
-                            'num-xticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'num-xticks',
-                                           'value': 10, 'default': 10, 'action_type': R},
-                            'num-yticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'num-yticks',
-                                           'value': 10, 'default': 10, 'action_type': R},
-                            'x-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-rotation',
-                                           'value': 0, 'step': 1, 'limits': (-90, 90), 'accelerated': True,
-                                           'default': 0, 'action_type': D},
-                            'y-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-rotation',
-                                           'value': 0, 'step': 1, 'limits': (-90, 90), 'accelerated': True,
-                                           'default': 0, 'action_type': D}}},
-                    'figure': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'figure', 'value': None,
-                        'default': None,
-                        'children': {
-                            'width': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'width', 'value': 8,
-                                      'default': 8, 'action_type': R},
-                            'height': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'height',
-                                       'value': 4, 'default': 4, 'action_type': R}}}}},
-            'Bar Plot': {
-                'type': 'group', 'enabled': True, 'expanded': False, 'name': 'Bar Plot', 'value': None, 'default': None,
-                'children': {
-                    'use-palette': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'use-palette',
-                                    'value': True, 'default': True, 'action_type': R},
-                    'palette': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'palette',
-                                'value': 'husl', 'values': ['husl', '---0', 'hls', 'deep', 'muted', 'bright', 'pastel',
-                                                            'dark', 'colorblind', '---1',
-                                                            'Pastel1', 'Pastel2', 'Paired', 'Accent', 'Dark2', 'Set1',
-                                                            'Set2', 'Set3', 'tab10', 'tab20', 'tab20b', 'tab20c'],
-                                'default': 'husl', 'action_type': R, 'tip': tooltip2},
-                    'color': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'color',
-                              'value': [44, 105, 176, 255], 'default': [44, 105, 176, 255], 'action_type': R},
-                    'subplot-components': {'type': 'bool', 'enabled': True, 'expanded': True,
-                                           'name': 'subplot-components', 'value': True, 'default': True,
-                                           'action_type': R, 'tip': 'Groups energy components in bar plot'},
-                    'scale-yaxis': {'type': 'bool', 'enabled': True, 'expanded': True,
-                                    'name': 'scale-yaxis', 'value': False, 'default': False, 'action_type': R,
-                                    'tip': 'Uses exponential values in y-axis'},
-                    'remove-molid': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'remove-molid',
-                                     'value': True, 'default': True, 'action_type': R},
-                    'IE/C2 Entropy': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'IE/C2 Entropy', 'value': None,
-                        'default': None,
-                        'children': {
-                            'ie-color': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'ie-color',
-                                         'value': [0, 0, 255, 255], 'default': [0, 0, 255, 255], 'action_type': R},
-                            'sigma-color': {
-                                'type': 'group', 'enabled': True, 'expanded': True, 'name': 'sigma-color',
-                                'value': None, 'default': None,
-                                'children': {
-                                    'reliable': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'reliable',
-                                                 'value': [0, 255, 0, 255], 'default': [0, 255, 0, 255],
-                                                 'action_type': R, 'tip': 'Color if sigma < 3.6kcal/mol'},
-                                    'non-reliable': {'type': 'color', 'enabled': True, 'expanded': True,
-                                                     'name': 'non-reliable', 'value': [255, 0, 0, 255],
-                                                     'default': [255, 0, 0, 255], 'action_type': R,
-                                                     'tip': 'Color if sigma > 3.6kcal/mol'}}}}},
-                    'error-line': {'type': 'group', 'enabled': True, 'expanded': True, 'name': 'error-line',
-                                   'value': None, 'default': None,
-                                   'children': {
-                                       'width': {'type': 'float', 'enabled': True, 'expanded': True, 'name': 'width',
-                                                 'value': 0.7, 'step': 0.1, 'limits': (0.1, 1.5),
-                                                 'accelerated': True, 'default': 0.7, 'action_type': R},
-                                       'color': {'type': 'color', 'enabled': True, 'expanded': True,
-                                                 'name': 'color', 'value': [0, 0, 0, 255],
-                                                 'default': [0, 0, 0, 255], 'action_type': R},
-                                       'cap-size': {'type': 'int', 'enabled': True, 'expanded': True,
-                                                    'name': 'cap-size', 'value': 0, 'step': 1, 'limits': (0, 50),
-                                                    'accelerated': True, 'default': 0, 'action_type': R},
-                                       'representation': {'type': 'list', 'enabled': True, 'expanded': True,
-                                                          'name': 'representation', 'value': 'SD',
-                                                          'values': ['SD', 'SEM'], 'default': 'SD', 'action_type': R,
-                                                          'tip': "The metric representing the error line. SD, the "
-                                                                 "Standard Deviation, describes the data distribution "
-                                                                 "around the mean, while SEM, the Standard Error of "
-                                                                 "the Mean, describes how representative the mean is "
-                                                                 "of the population."},
-
-
-                                   }},
-                    'bar-label': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'bar-label', 'value': None,
-                        'default': None,
-                        'children': {
-                            'show': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'show', 'value': False,
-                                     'default': False, 'action_type': R},
-                            'fontsize': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'fontsize',
-                                         'value': 8, 'limits': (2, 20), 'default': 8, 'action_type': D},
-                            'label_type': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'label_type',
-                                           'value': 'edge', 'values': ['edge', 'center'], 'default': 'edge',
-                                           'action_type': R},
-                            'padding': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'padding',
-                                        'value': 5, 'limits': (0, 50), 'default': 5, 'action_type': R}
-                        }},
-                    'fontsize': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'fontsize', 'value': None,
-                        'default': None,
-                        'children': {
-                            'x-ticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-ticks',
-                                        'value': 10, 'default': 10, 'action_type': D},
-                            'y-ticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-ticks',
-                                        'value': 10, 'default': 10, 'action_type': D},
-                            'x-label': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-label',
-                                        'value': 12, 'default': 12, 'action_type': D},
-                            'y-label': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-label',
-                                        'value': 12, 'default': 12, 'action_type': D},
-                            'title': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'title',
-                                      'value': 14, 'default': 14, 'action_type': D},
-                            'suptitle': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'suptitle',
-                                         'value': 12, 'default': 12, 'action_type': D}}},
-                    'axes': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'axes', 'value': None,
-                        'default': None,
-                        'children': {
-                            'num-yticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'num-yticks',
-                                           'value': 10, 'default': 10, 'action_type': D},
-                            'x-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-rotation',
-                                           'value': 45, 'step': 1, 'limits': (-90, 90),
-                                           'accelerated': True, 'default': 45, 'action_type': D},
-                            'y-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-rotation',
-                                           'value': 0, 'step': 1, 'limits': (-90, 90),
-                                           'accelerated': True, 'default': 0, 'action_type': D},
-                            'y-inverted': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'y-inverted',
-                                           'value': True, 'default': True, 'action_type': R}
-                        }},
-                    'figure': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'figure', 'value': None,
-                        'default': None,
-                        'children': {
-                            'width': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'width',
-                                      'value': 5, 'default': 5, 'action_type': R},
-                            'height': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'height',
-                                       'value': 4, 'default': 4, 'action_type': R}}}}},
-            'Heatmap Plot': {
-                'type': 'group', 'enabled': True, 'expanded': False, 'name': 'Heatmap Plot', 'value': None,
-                'default': None,
-                'children': {
-                    'highlight-components': {'type': 'bool', 'enabled': True, 'expanded': True,
-                                             'name': 'highlight-components', 'value': True, 'default': True,
-                                             'action_type': R, 'tip': 'Highlights receptor/ligand residues'},
-                    'legend': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'legend', 'value': True,
-                               'default': True, 'action_type': R},
-                    'remove-molid': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'remove-molid',
-                                     'value': True, 'default': True, 'action_type': R,
-                                     'tip': 'Removes R/L labels from residue names'},
-                    'receptor-color': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'receptor-color',
-                                       'value': [255, 85, 127, 255], 'default': [255, 85, 127, 255], 'action_type': R},
-                    'ligand-color': {'type': 'color', 'enabled': True, 'expanded': True, 'name': 'ligand-color',
-                                     'value': [0, 255, 0, 255], 'default': [0, 255, 0, 255], 'action_type': R},
-
-                    'y-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-rotation',
-                                   'value': 0, 'step': 1, 'limits': (-90, 90), 'accelerated': True, 'default': 0,
-                                   'action_type': D},
-                    'Per-wise': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'Per-wise', 'value': None,
-                        'default': None,
-                        'children': {
-                            'palette': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'palette',
-                                        'value': 'seismic', 'values': ['seismic', '---1',
-                                                                       'Balance_7', 'Balance_5', 'Curl_7', 'Curl_5',
-                                                                       'Delta_7', 'Delta_5', '---2',
-                                                                       'ArmyRose_7', 'ArmyRose_5', 'Geyser_7',
-                                                                       'Geyser_5', 'Temps_7', 'Temps_5', 'TealRose_7',
-                                                                       'TealRose_5', 'Tropic_7', 'Tropic_5', '---3',
-                                                                       'BrBG_7', 'BrBG_5', 'PRGn_7', 'PRGn_5', 'PiYG_7',
-                                                                       'PiYG_5', 'PuOr_7', 'PuOr_5', 'RdBu_7', 'RdBu_5',
-                                                                       'RdGy_7', 'RdGy_5', '---4', '---5',
-                                                                       'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm'
-                                                                       ], 'default': 'seismic', 'action_type': R,
-                                        'tip': tooltip1},
-                            'annotation': {'type': 'bool', 'enabled': True, 'expanded': True, 'name': 'annotation',
-                                           'value': False, 'default': False, 'action_type': R},
-                            'x-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-rotation',
-                                           'value': 90, 'step': 1, 'limits': (-90, 90), 'accelerated': True,
-                                           'default': 90, 'action_type': D}}},
-                    'Per-residue': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'Per-residue', 'value': None,
-                        'default': None,
-                        'children': {
-                            'palette': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'palette',
-                                        'value': 'seismic', 'values': ['seismic', '---1',
-                                                                       'Balance_7', 'Balance_5', 'Curl_7', 'Curl_5',
-                                                                       'Delta_7', 'Delta_5', '---2',
-                                                                       'ArmyRose_7', 'ArmyRose_5', 'Geyser_7',
-                                                                       'Geyser_5', 'Temps_7', 'Temps_5', 'TealRose_7',
-                                                                       'TealRose_5', 'Tropic_7', 'Tropic_5', '---3',
-                                                                       'BrBG_7', 'BrBG_5', 'PRGn_7', 'PRGn_5', 'PiYG_7',
-                                                                       'PiYG_5', 'PuOr_7', 'PuOr_5', 'RdBu_7', 'RdBu_5',
-                                                                       'RdGy_7', 'RdGy_5', '---4', '---5',
-                                                                       'RdYlBu', 'RdYlGn', 'Spectral', 'coolwarm'
-                                                                       ], 'default': 'seismic', 'action_type': R,
-                                        'tip': tooltip1},
-                            'num-xticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'num-xticks',
-                                           'value': 10, 'default': 10, 'action_type': R},
-                            'x-rotation': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-rotation',
-                                           'value': 0, 'step': 1, 'limits': (-90, 90), 'accelerated': True,
-                                           'default': 0, 'action_type': D}}},
-                    'fontsize': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'fontsize', 'value': None,
-                        'default': None,
-                        'children': {
-                            'x-ticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-ticks',
-                                        'value': 10, 'default': 10, 'action_type': D},
-                            'y-ticks': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-ticks',
-                                        'value': 10, 'default': 10, 'action_type': D},
-                            'x-label': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'x-label',
-                                        'value': 12, 'default': 12, 'action_type': D},
-                            'y-label': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'y-label',
-                                        'value': 12, 'default': 12, 'action_type': D},
-                            'title': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'title',
-                                      'value': 14, 'default': 14, 'action_type': D},
-                            'suptitle': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'suptitle',
-                                         'value': 12, 'default': 12, 'action_type': D},
-                            'legend': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'legend',
-                                       'value': 9, 'default': 9, 'action_type': R},
-                            'colorbar-ticks': {'type': 'int', 'enabled': True, 'expanded': True,
-                                               'name': 'colorbar-ticks', 'value': 9, 'default': 9, 'action_type': R},
-                            'colorbar-label': {'type': 'int', 'enabled': True, 'expanded': True,
-                                               'name': 'colorbar-label', 'value': 11, 'default': 11, 'action_type': R},
-                            'annotation': {'type': 'int', 'enabled': True, 'expanded': True,
-                                           'name': 'annotation', 'value': 8, 'default': 8, 'action_type': R}
-                        }},
-                    'figure': {
-                        'type': 'group', 'enabled': True, 'expanded': True, 'name': 'figure', 'value': None,
-                        'default': None,
-                        'children': {
-                            'width-per-residue': {'type': 'int', 'enabled': True, 'expanded': True,
-                                                  'name': 'width-per-residue', 'value': 10, 'default': 10,
-                                                  'action_type': R},
-                            'width-per-wise': {'type': 'int', 'enabled': True, 'expanded': True,
-                                               'name': 'width-per-wise', 'value': 8, 'default': 8, 'action_type': R},
-                            'height': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'height',
-                                       'value': 7, 'default': 7, 'action_type': R}}}}},
-            'Visualization': {
-                'type': 'group', 'enabled': True, 'expanded': False, 'name': 'Visualization', 'value': None,
-                'default': None,
-                'children': {
-                    'palette': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'palette',
-                                'value': 'auto', 'values': ['auto', '---0', 'seismic', '---1',
-                                                            'Balance_7', 'Balance_5', 'Curl_7', 'Curl_5',
-                                                            'Delta_7', 'Delta_5', '---2',
-                                                            'ArmyRose_7', 'ArmyRose_5', 'Geyser_7',
-                                                            'Geyser_5', 'Temps_7', 'Temps_5', 'TealRose_7',
-                                                            'TealRose_5', 'Tropic_7', 'Tropic_5', '---3',
-                                                            'BrBG_7', 'BrBG_5', 'PRGn_7', 'PRGn_5', 'PiYG_7',
-                                                            'PiYG_5', 'PuOr_7', 'PuOr_5', 'RdBu_7', 'RdBu_5',
-                                                            'RdGy_7', 'RdGy_5'
-                                                            ], 'default': 'auto', 'action_type': R, 'tip': tooltip1},
-                    'cartoon_oval_length': {'type': 'float', 'enabled': True, 'expanded': True,
-
-                                            'name': 'cartoon_oval_length', 'value': 1.0, 'step': 0.1, 'default': 1.0,
-                                            'action_type': R},
-                    'cartoon_rect_length': {'type': 'float', 'enabled': True, 'expanded': True,
-                                            'name': 'cartoon_rect_length', 'value': 1.2, 'step': 0.1, 'default': 1.2,
-                                            'action_type': R},
-                    'cartoon_rect_width': {'type': 'float', 'enabled': True, 'expanded': True,
-                                           'name': 'cartoon_rect_width', 'value': 0.3, 'step': 0.1, 'default': 0.3,
-                                           'action_type': R},
-                    'cartoon_side_chain_helper': {'type': 'bool', 'enabled': True, 'expanded': True,
-                                                  'name': 'cartoon_side_chain_helper', 'value': True, 'default': True,
-                                                  'action_type': R},
-                    'light_count': {'type': 'int', 'enabled': True, 'expanded': True, 'name': 'light_count',
-                                    'value': 1, 'step': 1, 'accelerated': False, 'limits': (1, 10),
-                                    'default': 1, 'action_type': R, 'tip': 'Defines the number of light sources'},
-                    'background': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'background',
-                                   'value': 'gray50', 'values': ['gray50', '---0', 'black',
-                                                                 'gray10', 'gray20', 'gray30', 'gray40',
-                                                                 'gray60', 'gray70', 'gray80', 'gray90', 'white'],
-                                   'default': 'gray50', 'action_type': R},
-                    'representation': {'type': 'list', 'enabled': True, 'expanded': True, 'name': 'representation',
-                                       'value': 'sticks', 'values': ['sticks', '---0', 'lines', '---1', 'spheres',
-                                                                     'surface', 'mesh', 'dots', 'lines+dots',
-                                                                     'sticks+dots'],
-                                       'default': 'sticks', 'action_type': R},
-                }}
-        }}
 
     def __init__(self, custom: Union[Path, str] = None):
         super(ChartSettings, self).__init__()
 
-        self.config_folder = Path('~').expanduser().absolute().joinpath('.config', 'gmx_MMPBSA')
+        self.config_folder = Path('~').expanduser().absolute().joinpath('.config', 'xBFreE-Analyzer')
         self.filename = self.config_folder.joinpath('settings.json')
+
+        default_settings_file = assets.this.joinpath('files', 'chart_settings.json')
+        with default_settings_file.open() as read_file:
+            config = json.load(read_file)
+            self.default_settings = deepcopy(config)
 
         if isinstance(custom, Path):
             with open(custom.joinpath('settings.json')) as read_file:
@@ -688,7 +335,13 @@ class ChartSettings(dict):
                 config = json.load(read_file)
                 self.update(config)
         else:
-            self.update(self.default)
+            self.update(self.default_settings)
+
+        # update the tooltips that dependent of absolutes paths
+        self['children']['Bar Plot']['children']['palette']['tip'] = assets.tooltip2
+        self['children']['Heatmap Plot']['children']['Per-wise']['children']['palette']['tip'] = assets.tooltip1
+        self['children']['Heatmap Plot']['children']['Per-residue']['children']['palette']['tip'] = assets.tooltip1
+        self['children']['3D-Visualization']['children']['palette']['tip'] = assets.tooltip1
 
         self.changes = dict(
             line_action=0,
@@ -703,7 +356,7 @@ class ChartSettings(dict):
         return self.filename.exists()
 
     def return_default(self):
-        self.update(self.default)
+        self.update(self.default_settings)
 
     def write_system_config(self, syspath: Path = None):
         """
@@ -717,7 +370,7 @@ class ChartSettings(dict):
                 json.dump(self, write_file, indent=4)
         else:
             self.set_as_default()
-            filename = syspath.joinpath('settings.json')
+            filename = syspath.joinpath('chart_settings.json')
             with open(filename, "w") as write_file:
                 json.dump(self, write_file, indent=4)
 
@@ -761,7 +414,7 @@ class ChartSettings(dict):
                 elif k[1] == 'Heatmap Plot':
                     self.changes['heatmap_action'] = flatten[at]
                 elif k[1] == 'General':
-                    if len(k) > 5 and k[5] in ['dpi-save', 'save-format'] or k[3] == 'toolbar':
+                    if k[-2] in ['savefig.dpi', 'savefig.format', 'toolbar']:
                         self.changes['figure'] = flatten[at]
                     else:
                         self.changes['bar_action'] = flatten[at]
