@@ -11,6 +11,8 @@
 #  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License    #
 #  for more details.                                                           #
 # ##############################################################################
+from xBFreEana.widgets import SideBar
+
 try:
     from PyQt6.QtWidgets import *
     from PyQt6.QtCore import *
@@ -60,16 +62,31 @@ class GMX_MMPBSA_ANA(QMainWindow):
         self.mdi.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setCentralWidget(self.mdi)
 
+
+        self.left_sidebar = SideBar(self, Qt.ToolBarArea.LeftToolBarArea)
+        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.left_sidebar)
+        self.options_action = self.left_sidebar.addButton('Options', checkable=True, checked=True)
+
+        self.optionDockWidget = QDockWidget('Options', self)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.optionDockWidget)
+        self.options_action.toggled.connect(self.optionDockWidget.setVisible)
+
+        self.right_sidebar = SideBar(self, Qt.ToolBarArea.RightToolBarArea)
+        self.addToolBar(Qt.ToolBarArea.RightToolBarArea, self.right_sidebar)
+        self.data_action = self.right_sidebar.addButton('Data', checked=True, checkable=True)
+
+        s = self.right_sidebar.addSpacer()
+        correlation_action = self.right_sidebar.addButton('Correlation')
+
         self.treeDockWidget = QDockWidget('Data', self)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.treeDockWidget)
+
+        self.data_action.toggled.connect(self.treeDockWidget.setVisible)
 
         self.correlation_DockWidget = QDockWidget('Correlations', self)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.correlation_DockWidget)
         self.tabifyDockWidget(self.treeDockWidget, self.correlation_DockWidget)
 
-
-        self.optionDockWidget = QDockWidget('Options', self)
-        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.optionDockWidget)
 
         self.treeWidget = QTreeWidget(self)
         self.treeWidget.setIndentation(12)
@@ -172,7 +189,7 @@ class GMX_MMPBSA_ANA(QMainWindow):
         # self.fileMenu.addAction(self.opendirAct)
         self.fileMenu.addAction('Close All..', self.mdi.closeAllSubWindows)
         self.viewMenu = self.menuBar().addMenu("&View")
-        self.viewMenu.addAction('Show Data', self.treeDockWidget.show)
+        # self.viewMenu.addAction('Show Data', self.treeDockWidget.show)
         self.viewMenu.addAction('Show Correlation', self.correlation_DockWidget.show)
         self.viewMenu.addAction('Show Options', self.optionDockWidget.show)
         self.viewMenu.addSeparator()
