@@ -23,8 +23,8 @@ except:
 
 import itertools
 
-from matplotlib.colors import ListedColormap
 import matplotlib.backend_bases
+import matplotlib.colors as colors
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -34,15 +34,15 @@ import seaborn as sns
 from matplotlib import gridspec
 from matplotlib.backends import qt_compat
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas, NavigationToolbar2QT
+from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 from matplotlib.widgets import Cursor
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.stats import linregress, pearsonr, spearmanr
 
-# sns.set_theme()
-from chartsettings import Palettes
 from assets import logo
+from chartsettings import Palettes
 from utils import bar_label
 
 plt.rcParams["figure.autolayout"] = True
@@ -161,11 +161,6 @@ class ChartsBase(QMdiSubWindow):
 
     def draw(self):
         self.fig.tight_layout()
-        if self.options[('General', 'axes', 'sns.despine')]:
-            sns.despine(self.fig,
-                        offset=self.options[('General', 'axes', 'sns.despine.offset')],
-                        trim=self.options[('General', 'axes', 'sns.despine.trim')]
-                        )
         self.figure_canvas.draw()
         QGuiApplication.restoreOverrideCursor()
 
@@ -189,6 +184,13 @@ class ChartsBase(QMdiSubWindow):
                     label.set_horizontalalignment('left')
                 else:
                     label.set_horizontalalignment('right')
+
+    def despine(self):
+        if self.options[('General', 'axes', 'sns.despine')]:
+            sns.despine(self.fig,
+                        offset=self.options[('General', 'axes', 'sns.despine.offset')],
+                        trim=self.options[('General', 'axes', 'sns.despine.trim')]
+                        )
 
     def closeEvent(self, closeEvent: QCloseEvent) -> None:
         self.button.setChecked(False)
@@ -233,12 +235,9 @@ class LineChart(ChartsBase):
 
         self.setWindowTitle(options['subtitle'])
         self.update_config(options)
-        self.draw()
-
-    def check(self):
-        pass
 
     def update_config(self, options):
+        self.despine()
         self.fig.suptitle(f"{options['title']}\n{options['subtitle']}")
         self.line_plot_ax.xaxis.set_major_locator(
             mticker.MaxNLocator(nbins=options[('Line Plot', 'axes', 'num-xticks')], integer=True)
@@ -265,9 +264,16 @@ class BarChart(ChartsBase):
 
         # FIXME: vibrant palette
         p = ["#0077BB","#33BBEE","#009988","#EE7733","#CC3311","#EE3377","#BBBBBB"]
-
-        palette = (sns.color_palette(options[('Bar Plot', 'palette')], n_colors=self.data.columns.size)
-                   if options[('Bar Plot', 'use-palette')] else None)
+        if options[('Bar Plot', 'use-palette')]:
+            if 'by value' in options[('Bar Plot', 'palette')]:
+                # normalize color map symmetrically around 0
+                palette_name = options[('Bar Plot', 'palette')].split('|')[0].strip()
+                normal_y_values = colors.CenteredNorm()(self.data.loc['Average'])
+                palette = Palettes.get_colormap(palette_name)(normal_y_values)
+            else:
+                palette = sns.color_palette(options[('Bar Plot', 'palette')], n_colors=self.data.columns.size)
+        else:
+            palette = None
         if options.get('groups') and options[('Bar Plot', 'subplot-components')]:
             self.axes = self.fig.subplots(1, len(options['groups']), sharey=True,
                                           gridspec_kw={'width_ratios': [len(x) for x in options['groups'].values()]})
@@ -279,7 +285,8 @@ class BarChart(ChartsBase):
                 bar_plot_ax = sns.barplot(x=df.columns,
                                           y=df.loc['Average'],
                                           yerr=df.loc[options[('Bar Plot', 'error-line', 'representation')]],
-                                          palette=palette[s: s + len(options['groups'][g])] if palette else palette,
+                                          palette=(palette[s: s + len(options['groups'][g])]
+                                                   if palette is not None else palette),
                                           color=rgb2rgbf(options[('Bar Plot', 'color')]),
                                           error_kw=dict(
                                               ecolor=rgb2rgbf(options[('Bar Plot', 'error-line', 'color')]),
@@ -329,13 +336,11 @@ class BarChart(ChartsBase):
                                padding=options[('Bar Plot', 'bar-label', 'padding')],
                                label_type=options[('Bar Plot', 'bar-label', 'label_type')])
                 self.bar_labels.append(bl)
-            self.setup_text(bar_plot_ax, options, key='Bar Plot')
             self.cursor = Cursor(bar_plot_ax, useblit=True, color='black', linewidth=0.5, ls='--')
             bar_plot_ax.set_xticklabels(self._set_xticks(bar_plot_ax, options[('Bar Plot', 'remove-molid')]))
             self.bar_frames = 'frames' in self.data
         self.setWindowTitle(options['subtitle'])
         self.update_config(options)
-        self.draw()
 
     @staticmethod
     def _set_xticks(axe, remove_molid):
@@ -348,8 +353,8 @@ class BarChart(ChartsBase):
         return xlabels
 
     def update_config(self, options):
-        self.fig.suptitle(f"{options['title']}\n{options['subtitle']}",
-                          )
+        self.despine()
+        self.fig.suptitle(f"{options['title']}\n{options['subtitle']}")
         if isinstance(self.axes, np.ndarray):
             for c, g in enumerate(options['groups']):
                 bar_plot_ax = self.axes[c]
