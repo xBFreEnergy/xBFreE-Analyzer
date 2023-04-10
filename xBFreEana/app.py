@@ -14,7 +14,7 @@
 
 import sys
 import logging
-from xBFreE.exceptions import GMXMMPBSA_ERROR, CommandlineError
+from xBFreE.exceptions import xBFreEErrorLogging, CommandlineError
 from xBFreEana.commandlineparser import anaparser
 from xBFreEana.gui import GMX_MMPBSA_ANA
 from utils import get_files
@@ -30,7 +30,7 @@ except:
         pyqt = False
 finally:
     if not pyqt:
-        GMXMMPBSA_ERROR('Could not import PyQt5/PyQt6. xBFreE-Analyzer will be disabled until PyQt5/PyQt6 is '
+        xBFreEErrorLogging('Could not import PyQt5/PyQt6. xBFreE-Analyzer will be disabled until PyQt5/PyQt6 is '
                         'installed')
 
 
@@ -41,7 +41,7 @@ def run_xbfreeana():
     try:
         parser = anaparser.parse_args(sys.argv[1:])
     except CommandlineError as e:
-        GMXMMPBSA_ERROR(f'{type(e).__name__}: {e}')
+        xBFreEErrorLogging(f'{type(e).__name__}: {e}')
         sys.exit(1)
     ifiles = get_files(parser)
     w = GMX_MMPBSA_ANA(ifiles)

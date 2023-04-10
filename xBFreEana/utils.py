@@ -20,7 +20,7 @@ import logging
 import math
 from typing import Union
 
-from xBFreE.exceptions import GMXMMPBSA_ERROR
+from xBFreE.exceptions import xBFreEErrorLogging
 import pandas as pd
 import numpy as np
 from queue import Queue
@@ -394,5 +394,5 @@ def get_files(parser_args):
                 continue
             info_files.append(cf)
     if not len(info_files):
-        GMXMMPBSA_ERROR('No info files found!')
+        xBFreEErrorLogging('No info files found!')
     return info_files

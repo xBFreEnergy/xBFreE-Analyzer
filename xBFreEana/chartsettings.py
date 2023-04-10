@@ -17,7 +17,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.cm import datad
 from pathlib import Path
 import json
-import assets
+import xBFreEana.assets as assets
 
 
 def flatten_dict(d, parent_key=None):
