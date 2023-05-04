@@ -29,7 +29,7 @@ import sys
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, RawDescriptionHelpFormatter, RawTextHelpFormatter
 from pathlib import Path
 from xBFreE import __version__, __mmpbsa_version__, __ambertools_version__
-from xBFreE.exceptions import GMXMMPBSA_ERROR
+from xBFreE.exceptions import xBFreEErrorLogging
 from types import SimpleNamespace
 
 class OptionList(SimpleNamespace):
@@ -57,9 +57,9 @@ def check_arg(str_suffix, path=False):
         def gmx_MMPBSA_file(*args):
             result = f(*args)
             if path and not Path(result).exists():
-                GMXMMPBSA_ERROR(f'{result} do not exist or is inaccessible')
+                xBFreEErrorLogging(f'{result} do not exist or is inaccessible')
             if Path(result).suffix not in str_suffix:
-                GMXMMPBSA_ERROR(f'{result} does not correspond to the required structure format {str_suffix}')
+                xBFreEErrorLogging(f'{result} does not correspond to the required structure format {str_suffix}')
             return result
         return gmx_MMPBSA_file
     return decorator
@@ -104,7 +104,7 @@ class GMXMMPBSA_ArgParser(ArgumentParser):
 
     def exit(self, status=0, message=None):
         if message:
-            GMXMMPBSA_ERROR(message)
+            xBFreEErrorLogging(message)
         sys.exit(status)
 
 
