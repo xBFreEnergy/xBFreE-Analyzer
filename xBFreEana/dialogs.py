@@ -389,7 +389,7 @@ class InitDialog(QDialog):
             mut_only = False
             mutant = None
             stability = False
-            if fname.suffix == '.mmxsa':
+            if fname.suffix == '.xbfree':
                 with open(fname, 'rb') as of:
                     info = pickle.load(of)
                     # raise exception when the result file is old

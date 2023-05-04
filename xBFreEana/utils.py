@@ -378,11 +378,11 @@ def get_files(parser_args):
                 if files := list(cf.absolute().glob('*/*_info')):
                     recursive_files.extend(files)
                 else:
-                    recursive_files.extend(cf.absolute().glob('*/COMPACT_MMXSA_RESULTS.mmxsa'))
+                    recursive_files.extend(cf.absolute().glob('*/COMPACT_RESULTS_MMPBSA.xbfree'))
             elif files := list(cf.absolute().glob('*_info')):
                 recursive_files.extend(files)
             else:
-                recursive_files.extend(cf.absolute().glob('COMPACT_MMXSA_RESULTS.mmxsa'))
+                recursive_files.extend(cf.absolute().glob('COMPACT_RESULTS_MMPBSA.xbfree'))
             for rf in recursive_files:
                 if rf in info_files:
                     logging.warning(f'{rf} is duplicated and will be ignored')
