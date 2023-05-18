@@ -11,6 +11,7 @@
 #  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License    #
 #  for more details.                                                           #
 # ##############################################################################
+import logging
 import pickle
 
 from items_delegate import KiTreeDelegate
@@ -391,13 +392,25 @@ class InitDialog(QDialog):
             stability = False
             if fname.suffix == '.xbfree':
                 with open(fname, 'rb') as of:
-                    info = pickle.load(of)
-                    # raise exception when the result file is old
-                    if not info.INPUT.get('general'):
-                        raise TypeError('The current output files were created with an earlier version of gmx_MMPBSA.\n'
-                                        'Please run "gmx_MMPBSA --rewrite-output" to make them compatible with the '
-                                        'current version.')
+                    # FIXME: use this info for indentify the system
+                    # info: version, hash, method, name
+                    _info = pickle.load(of)
 
+                    info = pickle.load(of)
+                    basename = info.INPUT['general']['sys_name']
+                    if basename in names:
+                        while basename in names:
+                            basename = f"{basename}-{names.count(basename) + 1}"
+                        names.append(basename)
+                    temp_ki = [info.INPUT['general']['exp_ki']] if isinstance(info.INPUT['general']['exp_ki'], float) \
+                        else info.INPUT['general']['exp_ki']
+                    mut_only = info.INPUT['ala']['mutant_only']
+                    mutant = info.INFO['mut_str']
+                    stability = info.FILES.stability
+            elif fname.suffix == '.mmxsa':
+                logging.warning('Open old version files in compatibility mode...')
+                with open(fname, 'rb') as of:
+                    info = pickle.load(of)
                     basename = info.INPUT['general']['sys_name']
                     if basename in names:
                         while basename in names:

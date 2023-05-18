@@ -30,7 +30,7 @@ from xBFreEana import __version__
 from xBFreE import utils
 from items_delegate import KiTableDelegate
 from plots import Tables
-from xBFreE.mmpbsa.API import MMPBSA_API
+from oldapi.api import MMPBSA_API
 
 from dialogs import InitDialog, ProcessingProgressBar
 from customitem import CustomItem, CustomCorrItem
