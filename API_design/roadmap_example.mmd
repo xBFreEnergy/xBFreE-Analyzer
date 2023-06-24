@@ -1,0 +1,14 @@
+---
+
+---
+
+classDiagram
+    direction TB
+    class API {
+        +pd.DataFrame data
+
+        -load_files() List~str~ | List~Path~ | str | Path
+        -get_systems() List~Systems~
+
+    }
+

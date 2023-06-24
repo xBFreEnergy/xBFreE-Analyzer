@@ -1,0 +1,32 @@
+{#-
+  This file was automatically generated - do not edit
+-#}
+{% extends "base.html" %}
+
+{% block outdated %}
+  You're not viewing the latest version.
+  <a href="{{ '../' ~ base_url }}">
+    <strong>Click here to go to latest.</strong>
+  </a>
+{% endblock %}
+{% block extrahead %}
+  <link rel="stylesheet" href="{{ 'assets/stylesheets/global.css' | url }}">
+  <script src="{{ 'assets/js/news.js' | url }}"></script>
+      <script type="text/javascript">
+        loadNews("{{ 'news.json' | url }}")
+      </script>
+<style>
+.md-grid {
+    max-width: 80rem;
+}
+</style>
+
+{% endblock %}
+{% block announce %}
+  <span class="title">NEWS</span>
+  <div class="marquee">
+    <ul class="marquee-content" id="news-container">
+    </ul>
+  </div>
+
+{% endblock %}

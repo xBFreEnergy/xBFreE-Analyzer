@@ -1,0 +1,59 @@
+flowchart TD
+    a[calc_types]
+
+    subgraph SystemSubType
+    b1[normal]
+    b2[mutant]
+    b3[mutant-normal]
+    end
+
+    a --> b1
+    a --> b2
+    a --> b3
+
+    subgraph EnergyMethod
+    c1[GB]
+    c2[PB]
+    c3[RISM]
+    end
+
+    b1 --> c1
+    b1 --> c2
+    b1 --> c3
+
+    subgraph SystemComponent
+    d1[com]
+    d2[rec]
+    d3[lig]
+    d4[delta]
+    end
+
+    c1 --> d1
+    c1 --> d2
+    c1 --> d3
+    c1 --> d4
+
+    subgraph e1[EnergyTerm]
+    f1[BOND]
+    f3[...]
+    f4[TOTAL]
+    end
+    d4 --> e1
+
+    subgraph e2[Decomposition]
+     g1[residues]
+     subgraph h1[EnergyTerm]
+     direction LR
+     g2[int]
+     g3[eel]
+     g4[vdw]
+     g5[pol]
+     g6[sas]
+     end
+     g1 --> h1
+     h2[residues_pairs]
+     g1 --> h2
+     h2 --> h1
+    end
+
+    d4 --> e2

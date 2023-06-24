@@ -1,0 +1,16 @@
+flowchart TD
+    z1[System]
+
+    a1[Energy]
+    a2[DecompEnergy]
+
+    z1 --> a1
+    z1 --> a2
+
+    subgraph b1[EnergySubSystem]
+    c1[normal]
+    c2[mutant]
+    c3[mutant-normal]
+
+    end
+    a1 --> b1

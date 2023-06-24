@@ -1,0 +1,44 @@
+classDiagram
+    direction TB
+    class API {
+        +pd.DataFrame data
+
+        -load_files() List~str~ | List~Path~ | str | Path
+        -get_systems() List~Systems~
+
+    }
+
+
+
+    SubType --* Method
+    Method --* SysPart
+    SysPart --* Term
+%%    Animal: +isMammal()
+%%    Animal: +mate()
+    class Term{
+        +pd.DataFrame data
+        +str SystemName
+        +str SubSystemtype
+        +str Method
+        +str Method
+        +get_data() data
+        +plot() Line | Histogram
+    }
+    class SysPart{
+        +pd.DataFrame data
+        +get_data()
+        +get_term()
+        +plot()
+    }
+    class Method{
+        +pd.DataFrame data
+        +get_data()
+        +get_subpart()
+        +plot()
+    }
+    class SubType{
+        +pd.DataFrame data
+        +get_data()
+        +get_method()
+        +plot()
+    }
